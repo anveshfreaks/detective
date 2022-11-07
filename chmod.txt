@@ -1,0 +1,252 @@
+tail command:-
+-------------
+prints last few lines of the file (by default 10 lines)
+Syntax:-
+	tail /etc/passwd
+	or
+	tail -20 /etc/passwd	
+	the above command prints last 20 lines of the file.
+	or
+	tail -f /path/to/file
+	ex:- 
+	tail -f /var/log/messages 
+	The above command will print last 10 line, wait continuously for the file updates, and if any, they were printed.
+
+head command:-
+-------------
+prints first few line of the file (by defualt 10 lines )
+Synatax:- head /etc/passwd
+	or	
+	head -20 /etc/passwd
+	the above command prints first 20 lines of the file
+more command:-
+-------------
+More command prints the file page by page. Enterkey will scrol down one line, and space bar scrols up one page at a time.
+syntax:- more filename
+	or
+	 more filename1 filename2
+Use space bar or f or d to scrol down. And b for scroll up. Enter key will scrol down line.
+
+groupadd command:-
+----------------
+groupadd GroupName
+This will create ordinary group.
+
+groupadd -r GroupName
+The above command creates system group. -r is used to create system groups, which got group ids < 500. All ordinary groups will have GID 500 onwards.
+Ex:-
+groupadd -g 602 media
+The above command creates a group called 'media'with gid 602.
+
+gropdel command:-
+-----------------
+Used to delete the group.
+
+groupdel GroupName
+
+You can not delete user primary group until unless you delete the user.
+
+groupmod command:- is used to change group attributes such as group id, groupname etc.,
+
+ex:- groupmod -g 606 data
+     the above command chages group id to  606 for the  group 'data'
+    or
+     groupmod -n SapData data
+     the abvoe command changes the group name 'data' o 'SapData''
+usermod command:-
+--------------- is used to change attributes of the user id.
+	-c :  comment
+	-d :  home directory
+	-e :  expire
+	-f :  inactive
+	-g :  gid
+	-G :  Supplimentary groups
+	-s :  Shell
+	-L :  Lock
+	-U :  Unlock
+	-l :  Changes login Name
+        -a : append supplimentory  group; used along with -G flag
+useradd -G sales -e 2017-07-30 -f 5 -s /bin/bash -d /home/db01 -c "database User" db01
+to add fin group addition to existing supplimentory groups,
+usermod -a -G fin db01
+useradd -c "webAdmin User" -G sales,fin webadm
+
+To change login name:-
+Syntax:- usermod -l NewloginName oldLoginName
+Ex:-
+usermod -l webmgr webadm
+The login name will be altered to webmgr. However, home directory is not changed. User -m -d flags to create new home directory and move all the contents from old home directory to new home directory.
+Example:- usermod -m -d /home/webmgr webmgr
+Note:- The old home directory will be removed.
+
+wc command :-
+------------
+word count - to knwo numberr of lines (-l), words (-w), characters(c) in the file.
+ex:- wc /etc/shadow
+     wc -l /etc/login.defs
+     wc -w /etc/passwd
+     wc -lw /var/log/mwssages
+cat command :- Concatenation - prints the contents of the file. 
+Syntax:- cat file1 file2 file3
+ex:- cat /etc/passwd
+
+chgrp :-
+--------
+Syntax:- chgrp FileOrDirName
+Used to change the group ownership for a file or directory.
+Ex:- chgrp fin Dir01
+The above command changes the ownership to fin for directory 'Dir01'
+You can apply chgrp command recursively for Directories with -R flag
+Syntax:- chgrp -R Dir01
+
+
+chown:- changes the user ownership for file or directory
+------
+	Syntax:- chown Username FileOrDir
+		 or
+		 chown Username:Groupname FileOrDir
+		 or
+		 chown -R Username:GroupName Dir
+		 or
+		 chown -R Username Dir
+		or
+		 chown [-R] :GroupName Dir/FileName
+
+newgrp command:-
+--------------
+newgrp command is used to switch to one of user's secondary group as a primary group. This settig will be lost once the user exits the shell.
+Assume that the user 'rover' is part of fin and sales secondary groups(suppliment groups) and its UPG is 'rover'. 
+When a new file/dir is created, by defaults its user and group ownership will be 'rover' and 'rover'.
+Assume that you want to create your files/dirs with one of your suppliments group as group owner, then use the below command:
+newgrp GropName
+Where groupname is one of your suppliment groups. 
+ex:-
+newgrp sales
+With the above command, when you create files/dirs, the group ownership goes to 'sales' rather 'rover'.
+
+chmod command:-
+-------------
+Changes permission for a file or directory
+
+two modes to operate : Symbolic mode and Numberic (octal) mode
+Synmbolic mode:-
+---------------
+r : read
+w : write
+x : execute
+u : user
+g : group
+o : others
+a : all (u,g,o or ugo)
+, : comma is used as separator when muliple permission options are used in  chmod command
++ : grant permission
+- : revoke or deny permission
+= : specify
+s : set UID or SGID if applyed to Group
+t : Sticky bit with execution
+S : Set UID without Execute Permission or SGID if applyed to Group
+T : Sticky bit without Execute permission
+
+Examples:-
+chmod u+w balaji.txt
+Verify with ls -l balaji.txt
+chmod u=w balaji.txt
+Verify with ls -l balaji.txt
+chmod u+rx balaji.txt
+Verify with ls -l balaji.txt
+chmod u-rx balaji.txt
+Verify with ls -l balaji.txt
+chmod u-rx,g+x,o+w balaji.txt
+Verify with ls -l balaji.txt
+chmod u-rx,go-w balaji.txt
+Verify with ls -l balaji.txt
+chmod u-rx,g-w,o-w balaji.txt
+chmod a=rwx balaji.txt
+in the above example, 'a' refers to all, which means ugo
+Verify with ls -l balaji.txt
+chmod a= balaji.txt
+Verify with ls -l balaji.txt
+chmod a+rw balaji.txt
+Verify with ls -l balaji.txt
+
+Note:- You can use -R flag to apply permission changes recursively on diretories.
+
+Numeric(octal mode):-
+--------------------
+r w x  OctalNum
+0 0 0  0
+0 0 1  1
+0 1 0  2
+0 1 1  3
+1 0 0  4
+1 0 1  5
+1 1 0  6
+1 1 1  7
+
+--------------------
+chmod 777 balaji.txt
+      ugo
+chmod 622 balaji.txt
+chmod 600 balaji.txt
+is equivalent to chmod u=rw,go= balaji.txt
+
+
+T--> Symbolic
+1 -->Numeric
+t -->Symbolic (which means T+x)
+     Sticky bit with execution permission
+
+Syntax:-
+chmod +t dirName
+     +t grants execution and Sticky bit
+chmod -t dirName
+     -t remoke Sticky bit (deny)
+
+
+----------------------------------------------------------------
+Attribute	Numeric Mode	Symbolic Mode
+----------------------------------------------------------------
+SetUID(SUID)	4		s or (S) [Note: s=S+x]
+setGID(SGID) 	2		s or S   
+StickyBit(SVTX)	1		t or T [Note: t=T+x]
+----------------------------------------------------------------
+Stickybit:-
+When enabled on directories, the files or dirs can be only deleted by its owner and not by any other users (offcouse root can). 
+chmod +t /dir
+Note:- 
+1. usually sticky bit is enabled to world writable directories (which have 777 permissions), so that users can not mis-use the access by deleting files owned by others.
+2. When sticky bit is enabled on executable files, those executables, when executed they will remain in RAM, to avoid to reload the same program again when it is reference again. That is how the name sticky.
+3. Observe /tmp directory having sticky bit enabled with world writable permissions(777). All the users in the system can write into /tmp, however, you can not delete files or dirs owned by others.
+
+SetUID:- When set uid is applied on an executable file(using chmod command), the owner previleges are applied, as if the owner is executing the respective command.
+examples:-
+ chmod u+s /path/to/command
+Some of UNIX commands with suid enabled: /usr/bin/passwd, /usr/bin/su, /usr/bin/sudo etc.,
+
+For SGID : it is as if the group is executing it.
+ chmod g+s /path/to/command
+Note:- When SGID enabled on directories, all the files and multi level directories created will inherit the group ownership of the parent directory.
+Ex:- chomod g+s /dirName. Now create files or dirs under /dirName, observe that the group owner is inherited from the parent dir.
+
+For Sticky Bit
+ chmod +t DirName
+In numberic mode:
+chmod 1777 dirName : sticky bit Enabled on DirName
+chmod 4555 /path/to/command : SUID is enabled
+chmod 2555 /path/to/command : SGID is enabled
+Class exericise:
+I have demonstrated suid and sgid using /usr/bin/cp command. When I sent SUID on /usr/bin/cp command, and when ordinary user ran the same, the copied target file got root as owner. 
+Also tried setting SGID /usr/bin/cp command and when I copy the file being an ordinary user, observed the both the group owenership as root.
+#chmod 4755 /usr/bin/cp
+Now become ordinary user and do the below
+$cp /home/trainer/bravo.txt /tmp/bravo.txt
+ ls -l /tmp/bravo.txt  --> observe the owner of the is 'root'
+Bow become root user:
+#chmod g+s /usr/bin/cp
+ with above, cp command got both uid and gid set(note: previously uid already set, and now with above command gid is granted)
+Now become ordinary user and try executing cp commnd
+$cp /home/trainer/ips.txt /tmp/ips.txt
+Now observe that /tmp/ips.txt got root as owner (becuase of suid) and root as group owne (because of sgid)
+
+
+	
